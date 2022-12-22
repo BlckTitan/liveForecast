@@ -4,14 +4,14 @@ import { ApiLocation, ApiOptions } from '../Api/Api';
 import './style/Search.scss';
 import { AsyncPaginate } from 'react-select-async-paginate';
 
-export default function Search() {
+export default function Search({searchBarData}) {
 
     const [search, setSearch] = useState(null)
 
-    const loadOptions = (searchData) =>{
+    const loadOptions = (inputValue) =>{
         //creating the correct data to feed the loadOptions of the AsyncPaginate 
         //we get the location data using GeoCities Api and create an 'options' object array of value and label
-        return fetch(`${ApiLocation}/cities?minPopulation=1000000&namePrefix${searchData}`, ApiOptions)
+        return fetch(`${ApiLocation}/cities?minPopulation=1000000&namePrefix${inputValue}`, ApiOptions)
         .then((response) => response.json())
         .then((response)=>{
                 return {
@@ -28,9 +28,8 @@ export default function Search() {
     }
 
     const handleOnChange = (searchData) => {
-        //
         setSearch(searchData);
-        console.log(searchData)
+        searchBarData(searchData);
     }
 
   return (
