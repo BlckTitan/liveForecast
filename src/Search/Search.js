@@ -11,7 +11,7 @@ export default function Search({searchBarData}) {
     const loadOptions = (inputValue) =>{
         //creating the correct data to feed the loadOptions of the AsyncPaginate 
         //we get the location data using GeoCities Api and create an 'options' object array of value and label
-        return fetch(`${ApiLocation}/cities?minPopulation=1000000&namePrefix${inputValue}`, ApiOptions)
+        return fetch(`${ApiLocation}/cities?minPopulation=1000000&namePrefix=${inputValue}`, ApiOptions)
         .then((response) => response.json())
         .then((response)=>{
                 return {

@@ -9,9 +9,9 @@ export default function CurrentWeather({weatherData}) {
       <div className="top">
         <div className='weather_header'>
           <p className="city">{weatherData.city}</p>{console.log(weatherData)}
-          <p className="weather_description">{weatherData.weather[0].description}</p>
         </div>
         <div className='img'>
+          <p className="weather_description">{weatherData.weather[0].description}</p>
           <img alt="weather" className="weather_icon" src={require(`../icons/${weatherData.weather[0].icon}.png`)} />
         </div>
       </div>

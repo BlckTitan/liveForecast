@@ -1,27 +1,32 @@
 div.current_weather_container{
     font-size: 1.5rem;
     div.top{
-        display: flex;
         width: 100%;
-        height: 10rem;
+        height: 20rem;
         div.weather_header{
             font-weight: 600;
         }
-        img{
-            width: 8rem;
-            height: 8rem;
-            object-fit: cover;
-            background-repeat: no-repeat;
-            margin-left: 8rem;
+        div.img{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            img.weather_icon{
+                width: 5rem;
+                height: 5rem;
+                object-fit: cover;
+                background-repeat: no-repeat;
+                margin-left: 15rem;
+            }
         }
     }
     div.bottom{
         width: 100%;
-        height: 35rem;
-        p{
+        height: 25rem;
+        p.temprature{
             font-size: 6rem;
             font-weight: 800;
-            color: #f49d1a;
+            color: #d66c05;
             margin-bottom: 3rem;
         }
         span.title{
