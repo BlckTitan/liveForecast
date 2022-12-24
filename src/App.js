@@ -1,24 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 //style
 import './App.css';
 //component
 import Search from "./Search/Search";
 import Nav from './Nav/Nav';
 import CurrentWeather from './Current/CurrentWeather';
+import WeatherForecast from './Forecast/WeatherForecast';
 //api parameters
-import { WeatherApiKey } from './Api/Api';
+import { WeatherApiKey, WeatherAPiUrl} from './Api/Api';
 
 function App() {
 
   const [currentWeatherReport, setCurrentWeatherReport] = useState(null);
   const [weatherForecastReport, setWeatherForecastReport] = useState(null);
+  const [defaultWeatherReport, setDefaultWeatherReport] = useState(null);
+  const [defaultForecastReport, setDefaultForecastReport] = useState(null);
+
+  useEffect(()=>{
+    defaultWeather()
+  }, [])
 
   const handleSearch = (searchData) => {
     //we take the location data (longitude and latitude)
     //and pass it into the openWeather Api to the the current weather data and weather forecast data
     const [lat, lon] = searchData.value.split(' ');
-    const currentWeatherFetch = fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WeatherApiKey}&units=metric`);
-    const weatherForecastFetch = fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${WeatherApiKey}&units=metric`);
+    const currentWeatherFetch = fetch(`${WeatherAPiUrl}weather?lat=${lat}&lon=${lon}&appid=${WeatherApiKey}&units=metric`);
+    const weatherForecastFetch = fetch(`${WeatherAPiUrl}forecast?lat=${lat}&lon=${lon}&appid=${WeatherApiKey}&units=metric`);
     
     Promise.all([currentWeatherFetch, weatherForecastFetch])
     .then(async (response) => {
@@ -30,6 +37,27 @@ function App() {
     })
   }
 
+  //default  weather fetch
+  const defaultWeather = () => {
+    //lon 55.4797
+    //lat 25.3994
+    
+    const defaultLat = 25.3994;
+    const defaultLon = 55.4797
+  
+    const currentWeatherFetch = fetch(`${WeatherAPiUrl}/weather?lat=${defaultLat}&lon=${defaultLon}&appid=${WeatherApiKey}&units=metric`);
+    const WeatherForecastFetch = fetch(`${WeatherAPiUrl}/forecast?lat=${defaultLat}&lon=${defaultLon}&appid=${WeatherApiKey}&units=metric`)
+    
+    Promise.all([currentWeatherFetch, WeatherForecastFetch])
+    .then(async (response) => {
+      const defaultWeatherResponse  = await response[0].json();
+      const defaultForecastResponse  = await response[1].json();
+
+      setDefaultWeatherReport({city: 'Ajman, AE', ...defaultWeatherResponse});
+      setDefaultForecastReport({city: 'Ajman, AE', ...defaultForecastResponse});
+
+    })
+  }
   return (
     <div className="container">
       <img 
@@ -40,9 +68,11 @@ function App() {
       <Search searchBarData={handleSearch}/>
       <div className='weather_data'>
         <div className='weather_data_weather'>
-          {currentWeatherReport && <CurrentWeather weatherData={currentWeatherReport}/>}
+          {(currentWeatherReport !== null)  ? <CurrentWeather weatherData={currentWeatherReport}/> : ( defaultWeatherReport && <CurrentWeather weatherData={defaultWeatherReport}/>)}
         </div>
-        <div className='weather_data_forecast'>Forecast</div>
+        <div className='weather_data_forecast'>
+          {(weatherForecastReport !== null) ? <WeatherForecast weatherData={weatherForecastReport}/>: (defaultForecastReport && <WeatherForecast weatherData={defaultForecastReport}/>)}
+          </div>
       </div>
     </div>
   );
