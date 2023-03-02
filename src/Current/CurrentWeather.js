@@ -8,7 +8,7 @@ export default function CurrentWeather({weatherData}) {
     <div className='current_weather_container'>
       <div className="top">
         <div className='weather_header'>
-          <p className="city">{weatherData.city}</p>{console.log(weatherData)}
+          <p className="city">{weatherData.city}</p>
         </div>
         <div className='img'>
           <p className="weather_description">{weatherData.weather[0].description}</p>
